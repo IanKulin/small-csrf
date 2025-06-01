@@ -12,6 +12,7 @@
     
     <form action="/login" method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <p>Hint - admin / password</p>
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -39,7 +40,7 @@
     <div id="info-message" data-message="<%= messages.info[0] %>" style="display: none;"></div>
   <% } %>
 
-  <!-- Notyf script to show flash messages - now pure JavaScript -->
+  <!-- Notyf script to show flash messages -->
   <script>
     // Initialize Notyf
     const notyf = new Notyf({
