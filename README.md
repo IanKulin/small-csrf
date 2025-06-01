@@ -1,10 +1,10 @@
 # small-csrf
 
-A lightweight CSRF protection middleware for Express applications implementing OWASP's recommended Signed Double-Submit Cookie pattern.
+A lightweight CSRF protection middleware for Express applications implementing OWASP's Signed Double-Submit Cookie pattern.
 
 ## Introduction
 
-`small-csrf` provides robust Cross-Site Request Forgery (CSRF) protection for your Node.js/Express applications. It implements the OWASP-recommended Signed Double-Submit Cookie pattern, which binds CSRF tokens to user sessions using [HMAC](https://en.wikipedia.org/wiki/HMAC) signatures for enhanced security.
+`small-csrf` provides robust Cross-Site Request Forgery (CSRF) protection for your Node.js/Express applications. It implements the OWASP Signed Double-Submit Cookie pattern, which binds CSRF tokens to user sessions using [HMAC](https://en.wikipedia.org/wiki/HMAC) signatures for enhanced security.
 
 Key features:
 
@@ -14,7 +14,7 @@ Key features:
 - Constant-time token comparison to prevent timing attacks
 - Flexible configuration options for cookies and tokens
 
-Whilst any implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done. The only deliberate deviation from their advice is that I've allowing per-request token changes by setting `perSessionTokens: false` when setting up the csrfProtection middleware. The default is in line with their recommendations.
+Whilst any implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done. 
 
 ## Installation
 
