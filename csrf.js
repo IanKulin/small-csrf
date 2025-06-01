@@ -21,7 +21,7 @@ function csrfProtection(options = {}) {
     ignoreMethods: options.ignoreMethods || ["GET", "HEAD", "OPTIONS"],
     value: options.value || defaultValue, // where to find the token
     csrfParam: options.csrfParam || "_csrf", // what name is used for the token
-    perSessionTokens: options.perSessionTokens || false,
+    perSessionTokens: options.perSessionTokens !== false,
   };
   // return the middleware function
   return function csrf(req, res, next) {

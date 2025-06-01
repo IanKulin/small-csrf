@@ -736,6 +736,26 @@ describe("csrfProtection", () => {
 
       assert.notEqual(token1, token2);
     });
+
+    test("should generate same token for same session by default", () => {
+      // perSessionTokens left on default
+      const middleware = csrfProtection({ secret: testSecret });
+
+      const sessionId = "same-session-id";
+      const req1 = createMockReq({ session: { id: sessionId } });
+      const req2 = createMockReq({ session: { id: sessionId } });
+      const res1 = createMockRes();
+      const res2 = createMockRes();
+      const next = createMockNext();
+
+      middleware(req1, res1, next);
+      middleware(req2, res2, next);
+
+      const token1 = res1.cookies.csrf_token.value;
+      const token2 = res2.cookies.csrf_token.value;
+
+      assert.equal(token1, token2);
+    });
   });
 
   describe("constant time comparison", () => {

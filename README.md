@@ -91,7 +91,7 @@ app.listen(3000);
 
 `small-csrf` implements the Signed Double-Submit Cookie pattern as recommended by OWASP:
 
-1. A cryptographically strong random token is generated on GET requests
+1. A cryptographically strong random token is generated per session (by default; see below)
 2. The token is:
    - Set as an HTTP-only cookie with appropriate security settings
    - Made available for inclusion in forms or AJAX requests via `req.csrfToken()`
@@ -100,7 +100,19 @@ app.listen(3000);
    - Uses an HMAC signature to bind the token to the user's session
    - Performs validation using constant-time comparison to prevent timing attacks
 
-This approach effectively mitigates CSRF vulnerabilities applications.
+## Token Strategies
+
+### Per-Session Tokens (default - OWASP Recommended)
+- One token generated per user session
+- Allows multiple simultaneous form submissions from different tabs
+- Aligns with OWASP's Signed Double-Submit Cookie recommendations
+- More user-friendly for multi-tab browsing
+
+### Per-Request Tokens
+- New token generated for each request
+- Higher security vibe (token rotation)
+- May cause issues with multiple tabs or back/forward navigation
+- Enable with `perSessionTokens: false`
 
 ## API Reference
 
@@ -121,7 +133,7 @@ Creates and returns the CSRF middleware function.
 | `cookie.maxAge`    | Number  | `3600000`                    | Max age of the cookie in milliseconds (1 hour default)              |
 | `ignoreMethods`    | Array   | `["GET", "HEAD", "OPTIONS"]` | HTTP methods that don't need CSRF validation                        |
 | `csrfParam`        | String  | `"_csrf"`                    | Name of the parameter containing the CSRF token in requests         |
-| `perSessionTokens` | Boolean | `false`                      | If true, generates one token per session instead of per request     |
+| `perSessionTokens` | Boolean | `true`                       | If true, generates one token per session instead of per request     |
 
 ### `req.csrfToken()`
 
@@ -205,3 +217,4 @@ npm start
 ## Versions
 - 1.0.0 - initial
 - 1.0.1 - removed query parameters
+- 1.1.0 - change default to per-session tokens
