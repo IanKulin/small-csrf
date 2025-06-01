@@ -92,9 +92,9 @@ function verifyToken(req, config) {
   if (!cookieToken) {
     return false;
   }
+
   const requestToken =
     (req.body && req.body[config.csrfParam]) ||
-    (req.query && req.query[config.csrfParam]) ||
     req.headers["x-csrf-token"] ||
     req.headers["x-xsrf-token"];
   if (!requestToken) {
@@ -124,7 +124,6 @@ function verifyToken(req, config) {
 function defaultValue(req) {
   return (
     (req.body && req.body._csrf) ||
-    (req.query && req.query._csrf) ||
     req.headers["x-csrf-token"] ||
     req.headers["x-xsrf-token"]
   );
