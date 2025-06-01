@@ -41,8 +41,8 @@ function csrfProtection(options = {}) {
       csrfError.status = 403; // HTTP status code
       return next(csrfError);
     }
-    // for the rare? situation where the library user is rendering another POST with
-    // a form in it and the library users wants a new token, give them that ability
+    // for the rare situation where the library user needs to render another form with
+    // a POST action and wants a fresh token, provide that ability
     req.csrfToken = () => generateToken(req, config);
     next();
   };

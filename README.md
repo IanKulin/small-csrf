@@ -14,7 +14,7 @@ Key features:
 - Constant-time token comparison to prevent timing attacks
 - Flexible configuration options for cookies and tokens
 
-Whilst all implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done. The only deliberate deviation from their advice is that I've implemented per-request token changes. If you want to stick to per-session (OWASP recommended), set `perSessionTokens: true` when setting up the csrfProtection middleware.
+Whilst any implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done. The only deliberate deviation from their advice is that I've allowing per-request token changes by setting `perSessionTokens: false` when setting up the csrfProtection middleware. The default is in line with their recommendations.
 
 ## Installation
 
@@ -110,9 +110,8 @@ app.listen(3000);
 
 ### Per-Request Tokens
 - New token generated for each request
-- Higher security vibe (token rotation)
 - May cause issues with multiple tabs or back/forward navigation
-- Enable with `perSessionTokens: false`
+- Can be enabled with `perSessionTokens: false` during initialisation
 
 ## API Reference
 
