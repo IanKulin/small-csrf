@@ -151,7 +151,6 @@ For maximum security:
 - Always use HTTPS in production environments
 - Keep your CSRF secret different from your session secret
 - Use a cryptographically strong secret (at least 32 characters)
-- Consider enabling `perSessionTokens: true` if users need to submit multiple forms simultaneously
 - Set appropriate `sameSite` and `secure` cookie options based on your application's requirements
 
 ## Examples
