@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <!-- Add Notyf CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Dashboard</h1>
+      
+      <p>You are logged in</p>
+      <a href="/">Login again</a>
+    </div>
+
+    <!-- Store flash messages in hidden elements with data attributes -->
+    <% if (messages.error && messages.error.length > 0) { %>
+      <div id="error-message" data-message="<%= messages.error[0] %>" style="display: none;"></div>
+    <% } %>
+    
+    <% if (messages.success && messages.success.length > 0) { %>
+      <div id="success-message" data-message="<%= messages.success[0] %>" style="display: none;"></div>
+    <% } %>
+    
+    <% if (messages.info && messages.info.length > 0) { %>
+      <div id="info-message" data-message="<%= messages.info[0] %>" style="display: none;"></div>
+    <% } %>
+
+    <!-- Pure JavaScript for notifications -->
+    <script>
+      // Initialize Notyf
+      const notyf = new Notyf({
+        duration: 3000,
+        position: {
+          x: 'left',
+          y: 'bottom'
+        },
+        types: [
+          {
+            type: 'success',
+            background: '#28a745',
+            icon: false
+          },
+          {
+            type: 'error',
+            background: '#dc3545',
+            icon: false
+          },
+          {
+            type: 'info',
+            background: '#17a2b8',
+            icon: false
+          }
+        ]
+      });
+      
+      // Check for error message
+      const errorElement = document.getElementById('error-message');
+      if (errorElement) {
+        const errorMessage = errorElement.getAttribute('data-message');
+        notyf.error(errorMessage);
+      }
+      
+      // Check for success message
+      const successElement = document.getElementById('success-message');
+      if (successElement) {
+        const successMessage = successElement.getAttribute('data-message');
+        notyf.success(successMessage);
+      }
+      
+      // Check for info message
+      const infoElement = document.getElementById('info-message');
+      if (infoElement) {
+        const infoMessage = infoElement.getAttribute('data-message');
+        notyf.open({
+          type: 'info',
+          message: infoMessage
+        });
+      }
+    </script>
+  </body>
+</html>

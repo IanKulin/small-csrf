@@ -181,8 +181,17 @@ Then fetch the token when your SPA initializes.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions and issues are welcome, especially for any security issues.
 
 ## License
 
 [MIT](LICENSE)
+
+## Example App
+
+To run a local demo of `small-csrf` in an Express app from a cloned repo:
+
+```bash
+cd example
+npm install
+npm start
