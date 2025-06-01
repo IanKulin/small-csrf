@@ -40,7 +40,6 @@ app.use(
   })
 );
 
-
 app.use((req, res, next) => {
   // ensure session is initialized
   if (!req.session.initialized) {
@@ -56,6 +55,17 @@ app.use((req, res, next) => {
   next();
 });
 
+function requireAuth(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  } else {
+    req.session.errorMessage = "Please log in to access this page.";
+    req.session.save(() => {
+      res.redirect("/login");
+    });
+  }
+}
+
 app.get("/", (req, res) => {
   res.redirect("/login");
 });
@@ -68,6 +78,7 @@ app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   if (username === "admin" && password === "password") {
+    req.session.user = { username: username };
     req.session.successMessage = "Login successful!";
     req.session.save(() => {
       res.redirect("/dashboard");
@@ -80,8 +91,18 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", requireAuth, (req, res) => {
   res.render("dashboard");
+});
+
+app.get("/logout", (req, res) => {
+  if (req.session.user) {
+    delete req.session.user;
+    req.session.successMessage = "Logout successful!";
+  }
+  req.session.save(() => {
+    res.redirect("/login");
+  });
 });
 
 app.use((err, req, res, next) => {
