@@ -35,14 +35,11 @@ import csrfProtection from "small-csrf";
 
 const app = express();
 
-// Body parser middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-// Cookie parser middleware (required for csrf)
 app.use(cookieParser());
 
-// Session middleware (required for csrf)
+// session middleware (required for csrf)
 app.use(
   session({
     secret: "your-session-secret",
@@ -59,7 +56,16 @@ app.use(
   })
 );
 
-// Example of rendering a form with CSRF token
+// session initialisation middleware 
+app.use((req, res, next) => {
+  // Ensure session is initialised for session memory store
+  if (!req.session.initialized) {
+    req.session.initialized = true;
+  }
+  next();
+});
+
+// render a form with CSRF token
 app.get("/form", (req, res) => {
   res.send(`
     <form action="/submit" method="POST">
@@ -70,13 +76,13 @@ app.get("/form", (req, res) => {
   `);
 });
 
-// Example of processing a form with CSRF protection
 app.post("/submit", (req, res) => {
-  // If the request reaches here, CSRF validation passed
+  // if the request reaches here, CSRF validation passed since
+  // it's done in the middleware
   res.send("Form submitted successfully!");
 });
 
-// Example error handler for CSRF errors
+// handler for CSRF errors
 app.use((err, req, res, next) => {
   if (err.code === "EBADCSRFTOKEN") {
     return res.status(403).send("Invalid CSRF token. Form submission failed.");
