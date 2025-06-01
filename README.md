@@ -177,11 +177,11 @@ app.get("/api/csrf-token", (req, res) => {
 });
 ```
 
-Then fetch the token when your SPA initializes.
+Then fetch the token when your SPA initialises.
 
 ## Contributing
 
-Contributions and issues are welcome, especially for any security issues.
+Contributions and issues are welcome, especially for security issues.
 
 ## License
 
