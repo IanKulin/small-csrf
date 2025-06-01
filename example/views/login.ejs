@@ -2,13 +2,22 @@
 <html>
 <head>
   <title>Login Form</title>
-  <!-- Add Notyf CSS and JS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Login</h1>
+    
+    <% if (errorMessage) { %>
+      <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border: 1px solid #f5c6cb; border-radius: 4px;">
+        <%= errorMessage %>
+      </div>
+    <% } %>
+    
+    <% if (successMessage) { %>
+      <div style="background-color: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border: 1px solid #c3e6cb; border-radius: 4px;">
+        <%= successMessage %>
+      </div>
+    <% } %>
     
     <form action="/login" method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -26,71 +35,5 @@
       <button type="submit">Login</button>
     </form>
   </div>
-
-  <!-- Store flash messages in data attributes or in a global JS variable -->
-  <% if (messages.error && messages.error.length > 0) { %>
-    <div id="error-message" data-message="<%= messages.error[0] %>" style="display: none;"></div>
-  <% } %>
-  
-  <% if (messages.success && messages.success.length > 0) { %>
-    <div id="success-message" data-message="<%= messages.success[0] %>" style="display: none;"></div>
-  <% } %>
-  
-  <% if (messages.info && messages.info.length > 0) { %>
-    <div id="info-message" data-message="<%= messages.info[0] %>" style="display: none;"></div>
-  <% } %>
-
-  <!-- Notyf script to show flash messages -->
-  <script>
-    // Initialize Notyf
-    const notyf = new Notyf({
-      duration: 3000,
-      position: {
-        x: 'left',
-        y: 'bottom'
-      },
-      types: [
-        {
-          type: 'success',
-          background: '#28a745',
-          icon: false
-        },
-        {
-          type: 'error',
-          background: '#dc3545',
-          icon: false
-        },
-        {
-          type: 'info',
-          background: '#17a2b8',
-          icon: false
-        }
-      ]
-    });
-    
-    // Check for error message
-    const errorElement = document.getElementById('error-message');
-    if (errorElement) {
-      const errorMessage = errorElement.getAttribute('data-message');
-      notyf.error(errorMessage);
-    }
-    
-    // Check for success message
-    const successElement = document.getElementById('success-message');
-    if (successElement) {
-      const successMessage = successElement.getAttribute('data-message');
-      notyf.success(successMessage);
-    }
-    
-    // Check for info message
-    const infoElement = document.getElementById('info-message');
-    if (infoElement) {
-      const infoMessage = infoElement.getAttribute('data-message');
-      notyf.open({
-        type: 'info',
-        message: infoMessage
-      });
-    }
-  </script>
 </body>
 </html>
