@@ -167,37 +167,37 @@ describe("csrfProtection", () => {
       middleware(req, res, next);
       assert.equal(next.calls[0].code, "EBADCSRFTOKEN");
     });
-  });
 
-  test("should ignore token in default _csrf field when using custom parameter", () => {
-    const middleware = csrfProtection({
-      secret: testSecret,
-      csrfParam: "custom_token",
+    test("should ignore token in default _csrf field when using custom parameter", () => {
+      const middleware = csrfProtection({
+        secret: testSecret,
+        csrfParam: "custom_token",
+      });
+
+      // Generate a valid token
+      const getReq = createMockReq({ method: "GET" });
+      const getRes = createMockRes();
+      const getNext = createMockNext();
+      middleware(getReq, getRes, getNext);
+      const validToken = getRes.cookies.csrf_token.value;
+
+      // Put valid token in default field, but leave custom field empty
+      const postReq = createMockReq({
+        method: "POST",
+        cookies: { csrf_token: validToken },
+        body: {
+          _csrf: validToken, // Valid token in default location
+          custom_token: undefined, // No token in configured location
+        },
+      });
+      const postRes = createMockRes();
+      const postNext = createMockNext();
+
+      middleware(postReq, postRes, postNext);
+
+      // Should fail because it didn't find token in custom_token field
+      assert.equal(postNext.calls[0].code, "EBADCSRFTOKEN");
     });
-
-    // Generate a valid token
-    const getReq = createMockReq({ method: "GET" });
-    const getRes = createMockRes();
-    const getNext = createMockNext();
-    middleware(getReq, getRes, getNext);
-    const validToken = getRes.cookies.csrf_token.value;
-
-    // Put valid token in default field, but leave custom field empty
-    const postReq = createMockReq({
-      method: "POST",
-      cookies: { csrf_token: validToken },
-      body: {
-        _csrf: validToken, // Valid token in default location
-        custom_token: undefined, // No token in configured location
-      },
-    });
-    const postRes = createMockRes();
-    const postNext = createMockNext();
-
-    middleware(postReq, postRes, postNext);
-
-    // Should fail because it didn't find token in custom_token field
-    assert.equal(postNext.calls[0].code, "EBADCSRFTOKEN");
   });
 
   describe("HTTP method handling", () => {
@@ -258,84 +258,84 @@ describe("csrfProtection", () => {
       assert.equal(next.calls[0].code, "EBADCSRFTOKEN");
       assert.equal(next.calls[0].status, 403);
     });
-  });
 
-  test("should handle PUT requests", () => {
-    const middleware = csrfProtection({ secret: testSecret });
+    test("should handle PUT requests", () => {
+      const middleware = csrfProtection({ secret: testSecret });
 
-    // First, generate a valid token
-    const getReq = createMockReq({ method: "GET" });
-    const getRes = createMockRes();
-    const getNext = createMockNext();
-    middleware(getReq, getRes, getNext);
-    const validToken = getRes.cookies.csrf_token.value;
+      // First, generate a valid token
+      const getReq = createMockReq({ method: "GET" });
+      const getRes = createMockRes();
+      const getNext = createMockNext();
+      middleware(getReq, getRes, getNext);
+      const validToken = getRes.cookies.csrf_token.value;
 
-    // Then, test PUT request with valid token
-    const putReq = createMockReq({
-      method: "PUT",
-      cookies: { csrf_token: validToken },
-      body: { _csrf: validToken },
+      // Then, test PUT request with valid token
+      const putReq = createMockReq({
+        method: "PUT",
+        cookies: { csrf_token: validToken },
+        body: { _csrf: validToken },
+      });
+      const putRes = createMockRes();
+      const putNext = createMockNext();
+
+      middleware(putReq, putRes, putNext);
+
+      assert.equal(putNext.calls.length, 1);
+      assert.equal(putNext.calls[0], "called");
+      assert.equal(typeof putReq.csrfToken, "function");
     });
-    const putRes = createMockRes();
-    const putNext = createMockNext();
 
-    middleware(putReq, putRes, putNext);
+    test("should handle PATCH requests", () => {
+      const middleware = csrfProtection({ secret: testSecret });
 
-    assert.equal(putNext.calls.length, 1);
-    assert.equal(putNext.calls[0], "called");
-    assert.equal(typeof putReq.csrfToken, "function");
-  });
+      // First, generate a valid token
+      const getReq = createMockReq({ method: "GET" });
+      const getRes = createMockRes();
+      const getNext = createMockNext();
+      middleware(getReq, getRes, getNext);
+      const validToken = getRes.cookies.csrf_token.value;
 
-  test("should handle PATCH requests", () => {
-    const middleware = csrfProtection({ secret: testSecret });
+      // Then, test PATCH request with valid token
+      const patchReq = createMockReq({
+        method: "PATCH",
+        cookies: { csrf_token: validToken },
+        body: { _csrf: validToken },
+      });
+      const patchRes = createMockRes();
+      const patchNext = createMockNext();
 
-    // First, generate a valid token
-    const getReq = createMockReq({ method: "GET" });
-    const getRes = createMockRes();
-    const getNext = createMockNext();
-    middleware(getReq, getRes, getNext);
-    const validToken = getRes.cookies.csrf_token.value;
+      middleware(patchReq, patchRes, patchNext);
 
-    // Then, test PATCH request with valid token
-    const patchReq = createMockReq({
-      method: "PATCH",
-      cookies: { csrf_token: validToken },
-      body: { _csrf: validToken },
+      assert.equal(patchNext.calls.length, 1);
+      assert.equal(patchNext.calls[0], "called");
+      assert.equal(typeof patchReq.csrfToken, "function");
     });
-    const patchRes = createMockRes();
-    const patchNext = createMockNext();
 
-    middleware(patchReq, patchRes, patchNext);
+    test("should handle DELETE requests", () => {
+      const middleware = csrfProtection({ secret: testSecret });
 
-    assert.equal(patchNext.calls.length, 1);
-    assert.equal(patchNext.calls[0], "called");
-    assert.equal(typeof patchReq.csrfToken, "function");
-  });
+      // First, generate a valid token
+      const getReq = createMockReq({ method: "GET" });
+      const getRes = createMockRes();
+      const getNext = createMockNext();
+      middleware(getReq, getRes, getNext);
+      const validToken = getRes.cookies.csrf_token.value;
 
-  test("should handle DELETE requests", () => {
-    const middleware = csrfProtection({ secret: testSecret });
+      // Then, test DELETE request with valid token
+      const deleteReq = createMockReq({
+        method: "DELETE",
+        cookies: { csrf_token: validToken },
+        headers: { "x-csrf-token": validToken }, // Using header for variety
+      });
+      const deleteRes = createMockRes();
+      const deleteNext = createMockNext();
 
-    // First, generate a valid token
-    const getReq = createMockReq({ method: "GET" });
-    const getRes = createMockRes();
-    const getNext = createMockNext();
-    middleware(getReq, getRes, getNext);
-    const validToken = getRes.cookies.csrf_token.value;
+      middleware(deleteReq, deleteRes, deleteNext);
 
-    // Then, test DELETE request with valid token
-    const deleteReq = createMockReq({
-      method: "DELETE",
-      cookies: { csrf_token: validToken },
-      headers: { "x-csrf-token": validToken }, // Using header for variety
+      assert.equal(deleteNext.calls.length, 1);
+      assert.equal(deleteNext.calls[0], "called");
+      assert.equal(typeof deleteReq.csrfToken, "function");
     });
-    const deleteRes = createMockRes();
-    const deleteNext = createMockNext();
-
-    middleware(deleteReq, deleteRes, deleteNext);
-
-    assert.equal(deleteNext.calls.length, 1);
-    assert.equal(deleteNext.calls[0], "called");
-    assert.equal(typeof deleteReq.csrfToken, "function");
   });
 
   describe("session handling", () => {
