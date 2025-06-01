@@ -1,11 +1,12 @@
 {
   "name": "small-csrf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small, simple CSRF protection middleware for Express",
   "main": "csrf.js",
   "type": "module",
   "scripts": {
-    "example": "node ./example/server.js"
+    "example": "node ./example/server.js",
+    "test": "node --test"
   },
   "repository": {
     "type": "git",

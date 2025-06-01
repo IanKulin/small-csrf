@@ -183,9 +183,10 @@ Then fetch the token when your SPA initialises.
 
 Contributions and issues are welcome, especially for security issues.
 
-## License
+## Tests
 
-[MIT](LICENSE)
+Uses the built-in Node test runner - available from Node 20
+`npm test` to run
 
 ## Example App
 
@@ -195,3 +196,12 @@ To run a local demo of `small-csrf` in an Express app from a cloned repo:
 cd example
 npm install
 npm start
+```
+
+## License
+
+[MIT](LICENSE)
+
+## Versions
+- 1.0.0 - initial
+- 1.0.1 - removed query parameters
