@@ -25,9 +25,6 @@ jobs:
       - name: Ensure latest npm (supports OIDC)
         run: npm install -g npm@latest
 
-      # Install dependencies (if any)
-      - run: npm ci
-
       # Publish using OIDC — no NPM_TOKEN needed
       - name: Publish package to npm
         run: npm publish
