@@ -1,6 +1,6 @@
 {
   "name": "small-csrf",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A small, simple CSRF protection middleware for Express",
   "main": "csrf.js",
   "type": "module",

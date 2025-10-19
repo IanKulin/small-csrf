@@ -222,3 +222,4 @@ npm start
 - 1.0.0 - initial
 - 1.0.1 - removed query parameters
 - 1.1.0 - change default to per-session tokens
+- 1.1.1 - GitHub Action for secure NPM publishing

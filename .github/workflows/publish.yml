@@ -1,0 +1,33 @@
+name: Publish to npm (Trusted Publisher)
+
+on:
+  push:
+    tags:
+      - 'v*' # Example: v1.2.3
+
+permissions:
+  id-token: write   # Required for npm OIDC authentication
+  contents: read    # Required to clone the repository
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure npm 11.5.1 or later for OIDC support
+      - name: Ensure latest npm (supports OIDC)
+        run: npm install -g npm@latest
+
+      # Install dependencies (if any)
+      - run: npm ci
+
+      # Publish using OIDC — no NPM_TOKEN needed
+      - name: Publish package to npm
+        run: npm publish
