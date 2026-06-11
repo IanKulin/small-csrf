@@ -1,4 +1,4 @@
-# small-csrf
+# small-csrf ![NPM Version](https://img.shields.io/npm/v/small-csrf) ![NPM Downloads](https://img.shields.io/npm/d18m/small-csrf)
 
 A lightweight CSRF protection middleware for Express applications implementing OWASP's Signed Double-Submit Cookie pattern.
 
