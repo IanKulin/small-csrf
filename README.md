@@ -56,9 +56,13 @@ app.use(
   }),
 );
 
-// session initialisation middleware
+// Session initialisation middleware — required when saveUninitialized: false.
+// small-csrf binds each token to req.session.id, so the session ID must be
+// stable between the GET (form render) and the POST (form submit). Marking the
+// session modified here forces express-session to persist it and send a
+// connect.sid cookie on every GET, preventing a new session (and a different
+// ID) from being created on the subsequent POST.
 app.use((req, res, next) => {
-  // Ensure session is initialised for session memory store
   if (!req.session.initialized) {
     req.session.initialized = true;
   }
@@ -120,6 +124,30 @@ app.listen(3000);
 - New token generated for each request
 - May cause issues with multiple tabs or back/forward navigation
 - Can be enabled with `perSessionTokens: false` during initialisation
+
+## Session Requirements
+
+### `saveUninitialized: false` and unauthenticated forms
+
+`small-csrf` binds each CSRF token to `req.session.id` via HMAC. This means the session ID must be the same on the GET request that renders the form and the POST request that submits it.
+
+This is fine for authenticated routes — the user already has a persisted `connect.sid` cookie. It silently breaks on unauthenticated forms (most commonly a login page) when your Express app uses `saveUninitialized: false`:
+
+1. `GET /login` → express-session creates an ephemeral session (not saved, no `connect.sid` cookie sent) → `csrfToken()` generates a token bound to that session ID.
+2. `POST /login` → no `connect.sid` arrives → express-session creates a *new* ephemeral session with a different ID → HMAC recomputation fails → **403**.
+
+**Global fix (recommended):** The Quick Start example includes a session initialisation middleware that marks every session as modified, forcing express-session to persist it on every GET. If you follow the Quick Start, this is already handled.
+
+**Per-route fix:** If you apply CSRF selectively to specific routes rather than globally, mark the session as modified on each unauthenticated GET route that renders a form:
+
+```js
+router.get('/login', csrf, (req, res) => {
+  req.session.csrfInit = true; // marks session modified → express-session saves it
+  res.send(renderLoginForm(req.csrfToken()));
+});
+```
+
+This does not apply to authenticated routes — those already have a persisted session.
 
 ## API Reference
 
