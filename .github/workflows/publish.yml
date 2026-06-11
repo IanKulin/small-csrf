@@ -3,11 +3,11 @@ name: Publish to npm (Trusted Publisher)
 on:
   push:
     tags:
-      - 'v*' # Example: v1.2.3
+      - "v*" # Example: v1.2.3
 
 permissions:
-  id-token: write   # Required for npm OIDC authentication
-  contents: read    # Required to clone the repository
+  id-token: write # Required for npm OIDC authentication
+  contents: read # Required to clone the repository
 
 jobs:
   publish:
@@ -18,8 +18,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
 
       # Ensure npm 11.5.1 or later for OIDC support
       - name: Ensure latest npm (supports OIDC)

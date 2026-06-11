@@ -14,7 +14,7 @@ Key features:
 - Constant-time token comparison to prevent timing attacks
 - Flexible configuration options for cookies and tokens
 
-Whilst any implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done. 
+Whilst any implementation errors are my own, credit goes to OWASP and their [CSRF Cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) which lays out how they think this should be done.
 
 ## Installation
 
@@ -46,17 +46,17 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { secure: process.env.NODE_ENV === "production" },
-  })
+  }),
 );
 
 // CSRF protection middleware
 app.use(
   csrfProtection({
     secret: "at-least-32-characters-long-csrf-secret",
-  })
+  }),
 );
 
-// session initialisation middleware 
+// session initialisation middleware
 app.use((req, res, next) => {
   // Ensure session is initialised for session memory store
   if (!req.session.initialized) {
@@ -109,12 +109,14 @@ app.listen(3000);
 ## Token Strategies
 
 ### Per-Session Tokens (default - OWASP Recommended)
+
 - One token generated per user session
 - Allows multiple simultaneous form submissions from different tabs
 - Aligns with OWASP's Signed Double-Submit Cookie recommendations
 - More user-friendly for multi-tab browsing
 
 ### Per-Request Tokens
+
 - New token generated for each request
 - May cause issues with multiple tabs or back/forward navigation
 - Can be enabled with `perSessionTokens: false` during initialisation
@@ -219,6 +221,7 @@ npm start
 [MIT](LICENSE)
 
 ## Versions
+
 - 1.0.0 - initial
 - 1.0.1 - removed query parameters
 - 1.1.0 - change default to per-session tokens

@@ -22,7 +22,7 @@ app.use(
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     },
-  })
+  }),
 );
 
 // form parsing
@@ -37,7 +37,7 @@ app.use(
       secure: process.env.NODE_ENV === "production", // true in production
     },
     perSessionTokens: true,
-  })
+  }),
 );
 
 app.use((req, res, next) => {
